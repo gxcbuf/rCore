@@ -2,7 +2,6 @@
 .macro SAVE_GP n
     sd x\n, \n*8(sp)
 .endm
-
 .macro LOAD_GP n
     ld x\n, \n*8(sp)
 .endm
@@ -40,7 +39,6 @@ __alltraps:
 
 # 恢复被保存在内核栈的寄存器数据
 __restore:
-    mv sp, a0
     ld t0, 32*8(sp)
     ld t1, 33*8(sp)
     ld t2, 2*8(sp)

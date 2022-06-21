@@ -5,13 +5,17 @@
 #[macro_use]
 mod console;
 
-mod batch;
+mod config;
 mod lang_item;
+mod loader;
 mod logger;
 mod sbi;
 mod sync;
-mod syscall;
-mod trap;
+mod timer;
+
+pub mod syscall;
+pub mod task;
+pub mod trap;
 
 use core::arch::global_asm;
 
@@ -31,8 +35,12 @@ pub fn rust_main() -> ! {
     error!("[kernel] Hello, world!");
 
     trap::init();
-    batch::init();
-    batch::run_next_app();
+    loader::load_apps();
+    trap::enable_timer_interrupt();
+    timer::set_next_trigger();
+    task::run_first_task();
+
+    panic!("[kernel] unreachable in rust_main!");
 }
 
 // 初始化bss段
